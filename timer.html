@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Timer</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #232526 0%, #414345 100%);
+            color: #fff;
+            font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        h1 {
+            font-size: 3rem;
+            letter-spacing: 0.2em;
+            margin-bottom: 40px;
+            text-shadow: 0 4px 24px #000a;
+        }
+        #count {
+            font-size: 5rem;
+            font-weight: bold;
+            background: linear-gradient(90deg, #00c6ff 0%, #0072ff 100%);
+            color: #fff;
+            padding: 40px 80px;
+            border-radius: 30px;
+            box-shadow: 0 8px 32px 0 #000a, 0 1.5px 8px #00c6ff55;
+            letter-spacing: 0.15em;
+            border: 2px solid #00c6ff;
+            transition: background 0.4s;
+            margin-bottom: 30px;
+            user-select: none;
+        }
+        #count.pulse {
+            animation: pulse 0.7s;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 #00c6ff88; }
+            70% { box-shadow: 0 0 0 20px #00c6ff00; }
+            100% { box-shadow: 0 0 0 0 #00c6ff00; }
+        }
+    </style>
+</head>
+<body>
+    <h1>COUNT DOWN</h1>
+    <div id="count">--:--</div>
+    <script>
+        const timer = document.getElementById('count');
+        let counttime = 10;
+
+        function updateTimer() {
+            let minutes = Math.floor(counttime / 60);
+            let seconds = counttime % 60;
+            const formattedtime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            timer.textContent = formattedtime;
+            timer.classList.remove('pulse');
+            void timer.offsetWidth; // trigger reflow for animation restart
+            timer.classList.add('pulse');
+        }
+        function countdown() {
+            if (counttime > 0) {
+                counttime--;
+                updateTimer();
+            } else {
+                clearInterval(intervalId);
+                timer.textContent = "00:00";
+                timer.style.background = "linear-gradient(90deg, #ff512f 0%, #dd2476 100%)";
+                timer.style.borderColor = "#ff512f";
+                timer.style.color = "#fff";
+                timer.classList.remove('pulse');
+                setTimeout(() => {
+                    alert("Time's up!");
+                }, 300);
+            }
+        }
+        const intervalId = setInterval(countdown, 1000);
+        updateTimer();
+    </script>
+</body>
